@@ -1,0 +1,149 @@
+<!--index.wxml-->
+
+
+<view class="sen">
+  <view class="btn">
+    <button class="button"  bindtap="shezhi">设置</button>
+    <button class="button"  bindtap="shengji">升级</button>
+  </view>
+  <!--设备状态-->
+  <view class="shebei">
+    <view class="zhuangtai"  >设备状态：</view>
+    <view class="zhuangtai" style='color:{{color0}};' >Auto</view>
+    <view class="zhuangtai" style='color:{{color1}};' >Mppt</view>
+    <view class="zhuangtai" style='color:{{color2}};' >Shidian</view>
+    <view class="zhuangtai" style='color:{{color3}};' >Damen</view>
+    <view class="zhuangtai" style='color:{{color4}};' >ZYBeng</view>
+  </view>
+  <!--时间显示-->
+  <!-- <view class="dataTime">上传时间：{{dataTime}}</view> -->
+
+  <!--温湿度数值-->
+  <view  class="shujukuang">
+    <view  class="shuju">
+      <view class="canshu">
+        <view class="canshu_shuju"  style="display: flex; font-size: 26rpx;">蓄电池</view>
+        <view class="canshu_shuju" >电压:{{data0}}v</view>
+        <view class="canshu_shuju" >电流:{{data1}}a</view>
+        <view class="canshu_shuju" >功率:{{data2}}w</view>
+        <view class="canshu_shuju" >电量:{{data3}}kwh</view>
+      </view>
+      <view class="canshu">
+        <view class="canshu_shuju" style="display: flex; font-size: 26rpx;">蓄电池(mppt)</view>
+        <view class="canshu_shuju" >电压:{{data4}}v</view>
+        <view class="canshu_shuju" >电流:{{data5}}a</view>
+        <view class="canshu_shuju" >功率:{{data6}}w</view>
+        <view class="canshu_shuju" >电量:{{data7}}kwh</view>
+      </view>
+      <view class="canshu">
+        <view class="canshu_shuju" style="display: flex; font-size: 26rpx;">太阳能(mppt)</view>
+        <view class="canshu_shuju" >电压:{{data8}}v</view>
+        <view class="canshu_shuju" >电流:{{data9}}a</view>
+        <view class="canshu_shuju" >功率:{{data10}}w</view>
+        <view class="canshu_shuju" >电量:{{data11}}kwh</view>
+      </view>
+    </view>
+    <view  class="shuju">
+      <view class="canshu">
+        <view class="canshu_shuju" style="display: flex; font-size: 26rpx;">并网</view>
+        <view class="canshu_shuju" >电压:{{data12}}v</view>
+        <view class="canshu_shuju" >家用:{{data13}}w</view>
+        <view class="canshu_shuju" >发电:{{data14}}w</view>
+        <view class="canshu_shuju" >电量:{{data15}}kwh</view>
+      </view>
+      <view class="canshu">
+        <view class="canshu_shuju" style="display: flex; font-size: 26rpx;">市电</view>
+        <view class="canshu_shuju" >电压:{{data16}}v</view>
+        <view class="canshu_shuju" >电流:{{data17}}a</view>
+        <view class="canshu_shuju" >功率:{{data18}}w</view>
+        <view class="canshu_shuju" >电量:{{data19}}kwh</view>
+      </view>
+      <view class="canshu">
+        <view class="canshu_shuju" style="display: flex; font-size: 26rpx;">蓄电池</view>
+        <view class="canshu_shuju" >电压:{{data0}}v</view>
+        <view class="canshu_shuju" >电流:{{data1}}a</view>
+        <view class="canshu_shuju" >功率:{{data2}}w</view>
+        <view class="canshu_shuju" >电量:{{data3}}kwh</view>
+      </view>
+    </view>
+    <view  class="shuju">
+      <view class="canshu">
+        <view class="canshu_shuju" style="display: flex; font-size: 26rpx;">蓄电池</view>
+        <view class="canshu_shuju" >电压:{{data0}}v</view>
+        <view class="canshu_shuju" >电流:{{data1}}a</view>
+        <view class="canshu_shuju" >功率:{{data2}}w</view>
+        <view class="canshu_shuju" >电量:{{data3}}kwh</view>
+      </view>
+      <view class="canshu">
+        <view class="canshu_shuju" style="display: flex; font-size: 26rpx;">蓄电池</view>
+        <view class="canshu_shuju" >电压:{{data0}}v</view>
+        <view class="canshu_shuju" >电流:{{data1}}a</view>
+        <view class="canshu_shuju" >功率:{{data2}}w</view>
+        <view class="canshu_shuju" >电量:{{data3}}kwh</view>
+      </view>
+      <view class="canshu">
+        <view class="canshu_shuju" style="display: flex; font-size: 26rpx;">蓄电池</view>
+        <view class="canshu_shuju" >电压:{{data0}}v</view>
+        <view class="canshu_shuju" >电流:{{data1}}a</view>
+        <view class="canshu_shuju" >功率:{{data2}}w</view>
+        <view class="canshu_shuju" >电量:{{data3}}kwh</view>
+      </view>
+    </view>
+  </view>  
+  <view class="btn0">
+    <view class="btn1">
+      <view class="btn2">
+        <text>充电</text>
+        <switch class="btn3" checked="{{isChecked1}}" bindchange="changeSwitch1"/>
+      </view>
+      <view class="btn2">
+        <text>智能</text>
+        <switch class="btn3" checked="{{isChecked2}}" bindchange="changeSwitch2"/>
+      </view>
+      <view class="btn2">
+        <text>并网</text>
+        <switch class="btn3" checked="{{isChecked3}}" bindchange="changeSwitch3"/>
+      </view>
+      <view class="btn2">
+        <text>市电</text>
+        <switch class="btn3" checked="{{isChecked4}}" bindchange="changeSwitch4"/>
+      </view>
+    </view>
+    <view class="btn1">
+      <view class="btn2">
+        <text>并网</text>
+        <switch class="btn3" checked="{{isChecked5}}" bindchange="changeSwitch5"/>
+      </view>
+      <view class="btn2">
+        <text>太阳能</text>
+        <switch class="btn3" checked="{{isChecked6}}" bindchange="changeSwitch6"/>
+      </view>
+      <view class="btn2">
+        <text>逆变器</text>
+        <switch class="btn3" checked="{{isChecked7}}" bindchange="changeSwitch7"/>
+      </view>
+      <view class="btn2">
+        <text>大门</text>
+        <switch class="btn3" checked="{{isChecked8}}" bindchange="changeSwitch8"/>
+      </view>
+    </view>
+    <view class="btn1">
+      <view class="btn2">
+        <text>冷水</text>
+        <switch class="btn3" checked="{{isChecked9}}" bindchange="changeSwitch9"/>
+      </view>
+      <view class="btn2">
+        <text>热水</text>
+        <switch class="btn3" checked="{{isChecked10}}" bindchange="changeSwitch10"/>
+      </view>
+      <view class="btn2">
+        <text>增压</text>
+        <switch class="btn3" checked="{{isChecked11}}" bindchange="changeSwitch11"/>
+      </view>
+      <view class="btn2">
+        <text>路灯</text>
+        <switch class="btn3" checked="{{isChecked12}}" bindchange="changeSwitch12"/>
+      </view>
+    </view>
+  </view>
+</view>
