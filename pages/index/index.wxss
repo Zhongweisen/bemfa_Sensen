@@ -2,28 +2,110 @@
   /* display: flex; */
   /* margin: 0.8em; */
   background-color: #f5f5f5;      /*背景色*/
-
+}
+/* 隐藏内容样式 */
+/*mask*/
+.drawer_screen {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background: #000;
+  opacity: 0.5;
+  overflow: hidden;
+}
+/*content*/
+.animation_position{
+  display: flex;
+  width:100%;
+  justify-content: center;
 
 }
-.btn{
-  /* height: 100%; */
+.swiperbattery1
+{
+  display:flex;
+}
+.swiperbattery2
+{
+  height:100rpx;
+  margin-bottom:4rpx;
+  margin-left:43rpx;
+  width:120rpx
+}
+.drawer_box{
+  overflow: hidden;
+  position: fixed;
+  top:80px;
+  z-index: 1001;
+  background: #FAFAFA;
+  background-color: #d3f0a5;      /*背景色*/
+
+  border-radius: 3px;
+  width: 90%;
+}
+.drawer_title {
+  padding: 15px;
+  font: 20px "microsoft yahei";
+  text-align: center;
+}
+.drawer_content {
+  overflow-y: scroll;
+  /*超出父盒子高度可滚动*/
+}
+.btn {
   display: flex;
-  /* flex-direction: column; */
+  /* width:100%; */
+  justify-content:space-evenly;
+}
+
+.btn_ok {
+  /* width: 200rpx; */
+  height: 50rpx;
+  margin-top:5%;
+  padding: 10px;
+  border-radius: 5%;                /* 将设置为圆形 */
+
+  font: 20px "microsoft yahei";
+  text-align: center;
+  /* border-top: 1px solid #E8E8EA; */
+  /* background-color: #E8E8EA; */
+  color: #7abaf5;
+}
+.bottom {
+  padding-bottom: 8px;
+}
+.title {
+  display: flex;
   align-items: center;
   justify-content: center;
-  /* background-color: #f76c6c; */
-
-  
+  width: 25%;
+  /* margin:5% 0 0 0; */
+  border-bottom: 2rpx solid #ccc;
 }
-.button{
-  /* margin-top:2px;                   顶部边距 */
-  width: 330rpx;			
-  height: 32rpx;	
-  font-size: 18rpx;	
-  line-height: 2;
-  /* margin: 0.5em; */
-  /* justify-content: center; */
-
+.input_base {
+  display: flex;
+  width:60%;
+  margin:1% 0 0 0;
+  padding-left:5%;
+  border-bottom: 2rpx solid #ccc;
+}
+.input_base_Wlrg {
+  display: flex;
+  width:20%;
+  margin:1% 0 0 0;
+  padding-left:5%;
+  border-bottom: 2rpx solid #ccc;
+}
+input {
+  font: 15px "microsoft yahei";
+  /* background: #fff; */
+  color: #000;
+}
+.grid {
+  display: flex;
+  margin:20px;
 }
 .shebei{
   display: flex;
@@ -53,16 +135,20 @@
   height: 200rpx;
   border: 3rpx solid #2CC2C3;
   background-color: #e6e6e6;
-  border-radius: 5%;                /* 将设置为圆形 */
+  border-radius: 10px;                /* 将设置为圆形 */
   margin-top:5px;                   /*顶部边距*/
 }
 .canshu_shuju{
   height: 40rpx;
-  width: 200rpx;
-  left: 10rpx;          /* 向右移动 */
-  position: relative;  /* 向右移动 */
-  font-size: 23rpx;	   /* 字体大小 */
+  width: 190rpx;
+  left: 15rpx;          /* 向右移动  */
+  position: relative;  /* 向右移动*/
+  font-size: 25rpx;	   /* 字体大小 */
   justify-content: space-around;  
+  /* background-color: #b0ee3e; */
+  /* border-radius: 10px;                将设置为圆形 */
+
+
 }
 .btn0{
   margin: 0.8em;
@@ -76,7 +162,7 @@
   display: flex;
   margin: 0.1em;
   color: rgb(0, 0, 0);
-  border-radius: 5%; /* 将按钮设置为圆形 */
+  border-radius: 10px; /* 将按钮设置为圆形 */
   font-size: 26rpx;	
   border: 3rpx solid #2CC2C3;
   background-color: #e6e6e6;      /*背景色*/
@@ -88,5 +174,33 @@
 {
   zoom: .7;
 }
+.ktdy{
+  width: 690rpx;
+  height: 260rpx;
+  /* display: flex; */
+  justify-content: center; 
+  margin: 0.8em;
+  margin-top:5px;                   /*顶部边距*/
+  border: 3rpx solid #2CC2C3;
+  background-color: #e6e6e6;
+  font-size: 30rpx;	   /* 字体大小 */
+  border-radius: 10px;    
+}
+.shuju_ktdy{
+  display: flex;
+  justify-content: space-evenly; 
+  /* margin: 0.8em; */
+  /* border: 3rpx solid #2CC2C3; */
+  /* margin-top:5px;    */
+  border-radius: 10px;                  
 
+}
+.canshu_ktdy{
+  height:200rpx;
+  /* width: 500rpx; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly; 
+  font-size: 40rpx;	   /* 字体大小 */
+}
 

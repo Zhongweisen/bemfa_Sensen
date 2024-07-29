@@ -2,19 +2,98 @@
 
 
 <view class="sen">
-  <view class="btn">
-    <button class="button"  bindtap="shezhi">设置</button>
-    <button class="button"  bindtap="shengji">升级</button>
+    <!--弹出框-->
+    <view class="drawer_screen" bindtap="tanchuan" data-statu="close" data-name='' wx:if="{{showModalStatus}}"></view>
+    <!--content-->
+    <!--使用animation属性指定需要执行的动画-->
+    <view class="animation_position">
+      <view animation="{{animationData}}" class="drawer_box" wx:if="{{showModalStatus}}">
+      <!--drawer content-->
+        <view class="drawer_title" >{{Shebei}}</view>
+        <view  wx:if="{{Dantidianya}}">
+                <view class="swiperbattery1">
+                    <view class="swiperbattery2" wx:for="{{4}}" wx:for-index="i" wx:key="*this">
+                        <view style="height: 46rpx; display: flex; align-content: flex-start;">
+                            <image src="img/{{battryIMG[i]}}" style="position: absolute; width: 115rpx; height: 47rpx; z-index: 1;"></image>
+                            <text style="position: absolute; text-align: center; width: 115rpx; height: 62rpx; z-index: 2;">{{i+1}}</text>
+                        </view>
+                        <view style="text-align: center; width: 110rpx;">{{cellVotage[i]}}V</view>
+                    </view>
+                </view>
+                <view style="height: auto; width: 100%; padding-top: 12px; padding-bottom: 31rpx;  font-size: 33rpx;">
+                  <view style="display: flex; width: 100%; height: auto;">
+                        <view style="width: 50%; height: auto; text-align: center;">总电压：{{data0}}V</view>
+                        <view style="width: 50%; height: auto; text-align: center;">电池电量：{{data2}}%</view>
+                  </view>
+                  <view style="display: flex; width: 100%; height: auto;">
+                        <view style="width: 50%; height: auto; text-align: center;">保护板温度：{{data3_1}}  °C</view>
+                        <view style="width: 50%; height: auto; text-align: center;">电池温度：{{data3_2}}  °C</view>
+                    </view>
+                    <view class="btn">
+        <view class="btn_ok" bindtap="tanchuan" data-statu="ble_off" data-name='单体电压'>断开蓝牙</view>
+        <view class="btn_ok" bindtap="tanchuan"  data-statu="ble_on" data-name="单体电压">打开蓝牙</view>
+      </view>
+
+                </view>
+        </view>
+    <view  wx:if="{{Bingwangkongzhiqi}}">
+      <view class="drawer_content">
+        <view class="grid">
+          <label class="title col-0">电池容量:</label>
+          <input class="input_base input_h30 col-1" bindblur="Max" placeholder="({{Max}}A)"></input>
+        </view>
+        <view class="grid">
+          <label class="title col-0">当前容量:</label>
+          <input class="input_base input_h30 col-1" bindblur="output" placeholder="({{output}}A)"></input>
+        </view>
+      </view>
+      <view class="btn">
+        <view class="btn_ok" bindtap="tanchuan" data-statu="close" data-name='Jiaozhui'>满电校准</view>
+        <view class="btn_ok" bindtap="tanchuan" data-statu="close" data-name="ok">确定
+        </view>
+      </view>
+    </view>
+
+    <view class="drawer_content" wx:if="{{Taiyangnengkongzhiqi}}">
+        <view class="grid">
+          <label class="title col-0">充电电压:</label>
+          <input class="input_base input_h30 col-1" bindblur="Uxm" placeholder="12.5V-14.5V ({{Canshu1}}V)"></input>
+        </view>
+        <view class="grid">
+          <label class="title col-0">充电电流:</label>
+          <input class="input_base input_h30 col-1" bindblur="It" placeholder="10A-80A ({{Canshu2}}A)"></input>
+        </view>
+        <view class="grid">
+          <label class="title col-0">浮充电压:</label>
+          <input class="input_base input_h30 col-1" bindblur="Uxf" placeholder="13.8V-14.2V ({{Canshu3}}V)"></input>
+        </view>
+        <view class="bottom grid">
+          <label class="title col-0">追踪电压:</label>
+          <input class="input_base input_h30 col-1" bindblur="Utg" placeholder="14V-18V ({{Canshu4}}V)"></input>
+        </view>
+        <view class="grid">
+          <label class="title col-0">温度保护:</label>
+          <input class="input_base input_h30 col-1" bindblur="T" placeholder="30°C-60°C ({{Canshu5}}°C)"></input>
+        </view>
+      <view class="btn_ok" bindtap="tanchuan" data-statu="close">确定</view>
+    </view>
+    </view>
   </view>
+
+  
   <!--设备状态-->
   <view class="shebei">
     <view class="zhuangtai"  >设备状态：</view>
-    <view class="zhuangtai" style='color:{{color0}};' >Auto</view>
-    <view class="zhuangtai" style='color:{{color1}};' >Mppt</view>
-    <view class="zhuangtai" style='color:{{color2}};' >Shidian</view>
-    <view class="zhuangtai" style='color:{{color3}};' >Damen</view>
-    <view class="zhuangtai" style='color:{{color4}};' >ZYBeng</view>
+    <view class="zhuangtai" style='color:{{color0}};' bindtap="tanchuan" data-statu="open" bindlongpress='shengji' data-name='并网控制器' >Auto</view>
+    <view class="zhuangtai" style='color:{{color1}};' bindtap="tanchuan" data-statu="open" bindlongpress='shengji' data-name='太阳能控制器'>Mppt</view>
+    <view class="zhuangtai" style='color:{{color2}};' bindtap="update1" data-statu="open" bindlongpress='shengji' data-name='市电' >Shidian</view>
+    <view class="zhuangtai" style='color:{{color3}};' bindtap="update1" data-statu="open" bindlongpress='shengji' data-name='大门' >Damen</view>
+    <view class="zhuangtai" style='color:{{color4}};' bindtap="update1" data-statu="open" bindlongpress='shengji' data-name='增压泵' >ZYBeng</view>
+    <view class="zhuangtai" style='color:{{color5}};' bindtap="Shezhi_Wlrg" data-statu="open" bindlongpress='shengji' data-name='五菱荣光' >Wlrg</view>
+    <view class="zhuangtai" style='color:{{color6}};' bindtap="Shezhi_Ktdy" data-statu="open" bindlongpress='shengji' data-name='可调电源' >Ktdy</view>
   </view>
+
+
   <!--时间显示-->
   <!-- <view class="dataTime">上传时间：{{dataTime}}</view> -->
 
@@ -22,128 +101,144 @@
   <view  class="shujukuang">
     <view  class="shuju">
       <view class="canshu">
-        <view class="canshu_shuju"  style="display: flex; font-size: 26rpx;">蓄电池</view>
-        <view class="canshu_shuju" >电压:{{data0}}v</view>
-        <view class="canshu_shuju" >电流:{{data1}}a</view>
-        <view class="canshu_shuju" >功率:{{data2}}w</view>
-        <view class="canshu_shuju" >电量:{{data3}}kwh</view>
+        <view class="canshu_shuju" bindlongpress='tanchuan'  data-statu="open" data-name='单体电压' style="display: flex; font-size: 26rpx;">蓄电池</view>
+        <view class="canshu_shuju" >电压: {{data0}} V</view>
+        <view class="canshu_shuju" >电流: {{data1}} A</view>
+        <view class="canshu_shuju" >功率: {{data01}} W</view>
+        <view class="canshu_shuju" >电量: {{data2}} %</view>
       </view>
       <view class="canshu">
         <view class="canshu_shuju" style="display: flex; font-size: 26rpx;">蓄电池(mppt)</view>
-        <view class="canshu_shuju" >电压:{{data4}}v</view>
-        <view class="canshu_shuju" >电流:{{data5}}a</view>
-        <view class="canshu_shuju" >功率:{{data6}}w</view>
-        <view class="canshu_shuju" >电量:{{data7}}kwh</view>
+        <view class="canshu_shuju" >电压: {{data4}} V</view>
+        <view class="canshu_shuju" >电流: {{data5}} A</view>
+        <view class="canshu_shuju" >功率: {{data6}} W</view>
+        <view class="canshu_shuju" >容量: {{data7}} A</view>
       </view>
       <view class="canshu">
         <view class="canshu_shuju" style="display: flex; font-size: 26rpx;">太阳能(mppt)</view>
-        <view class="canshu_shuju" >电压:{{data8}}v</view>
-        <view class="canshu_shuju" >电流:{{data9}}a</view>
-        <view class="canshu_shuju" >功率:{{data10}}w</view>
-        <view class="canshu_shuju" >电量:{{data11}}kwh</view>
+        <view class="canshu_shuju" >电压: {{data8}} V</view>
+        <view class="canshu_shuju" >电流: {{data9}} A</view>
+        <view class="canshu_shuju" >温度: {{data10}} °C</view>
+        <view class="canshu_shuju" >电量: {{data11}} Kwh</view>
       </view>
     </view>
     <view  class="shuju">
       <view class="canshu">
         <view class="canshu_shuju" style="display: flex; font-size: 26rpx;">并网</view>
-        <view class="canshu_shuju" >电压:{{data12}}v</view>
-        <view class="canshu_shuju" >家用:{{data13}}w</view>
-        <view class="canshu_shuju" >发电:{{data14}}w</view>
-        <view class="canshu_shuju" >电量:{{data15}}kwh</view>
+        <view class="canshu_shuju" >电压: {{data12}} V</view>
+        <view class="canshu_shuju" >家用: {{data13}} W</view>
+        <view class="canshu_shuju" >发电: {{data14}} W</view>
+        <view class="canshu_shuju" >电量: {{data15}} Kwh</view>
       </view>
       <view class="canshu">
         <view class="canshu_shuju" style="display: flex; font-size: 26rpx;">市电</view>
-        <view class="canshu_shuju" >电压:{{data16}}v</view>
-        <view class="canshu_shuju" >电流:{{data17}}a</view>
-        <view class="canshu_shuju" >功率:{{data18}}w</view>
-        <view class="canshu_shuju" >电量:{{data19}}kwh</view>
+        <view class="canshu_shuju" >电压: {{data16}} V</view>
+        <view class="canshu_shuju" >电流: {{data17}} A</view>
+        <view class="canshu_shuju" >功率: {{data18}} W</view>
+        <view class="canshu_shuju" >电量: {{data19}} Kwh</view>
       </view>
       <view class="canshu">
-        <view class="canshu_shuju" style="display: flex; font-size: 26rpx;">蓄电池</view>
-        <view class="canshu_shuju" >电压:{{data0}}v</view>
-        <view class="canshu_shuju" >电流:{{data1}}a</view>
-        <view class="canshu_shuju" >功率:{{data2}}w</view>
-        <view class="canshu_shuju" >电量:{{data3}}kwh</view>
+        <view class="canshu_shuju" style="display: flex; font-size: 26rpx;">合计</view>
+        <view class="canshu_shuju" >昨天: {{data20}} A</view>
+        <view class="canshu_shuju" >今天: {{data21}} A</view>
+        <view class="canshu_shuju" >用电: {{data22}} A</view>
+        <view class="canshu_shuju" >最大: {{data23}} A</view>
       </view>
     </view>
-    <view  class="shuju">
+    <!-- <view  class="shuju">
       <view class="canshu">
-        <view class="canshu_shuju" style="display: flex; font-size: 26rpx;">蓄电池</view>
-        <view class="canshu_shuju" >电压:{{data0}}v</view>
-        <view class="canshu_shuju" >电流:{{data1}}a</view>
-        <view class="canshu_shuju" >功率:{{data2}}w</view>
-        <view class="canshu_shuju" >电量:{{data3}}kwh</view>
+        <view class="canshu_shuju" style="display: flex; font-size: 26rpx;">自来水</view>
+        <view class="canshu_shuju" >水压: {{data25}} </view>
+        <view class="canshu_shuju" >水流: {{data26}} </view>
+        <view class="canshu_shuju" >水量: {{data27}} </view>
+        <view class="canshu_shuju" >状态: {{data28}} </view>
+      </view>
+      <view class="canshu">
+        <view class="canshu_shuju" style="display: flex; font-size: 26rpx;">热水器</view>
+        <view class="canshu_shuju" >水温: {{data29}} </view>
+        <view class="canshu_shuju" >水流: {{data30}} </view>
+        <view class="canshu_shuju" >温度: {{data31}} </view>
+        <view class="canshu_shuju" >状态: {{data32}} </view>
       </view>
       <view class="canshu">
         <view class="canshu_shuju" style="display: flex; font-size: 26rpx;">蓄电池</view>
-        <view class="canshu_shuju" >电压:{{data0}}v</view>
-        <view class="canshu_shuju" >电流:{{data1}}a</view>
-        <view class="canshu_shuju" >功率:{{data2}}w</view>
-        <view class="canshu_shuju" >电量:{{data3}}kwh</view>
+        <view class="canshu_shuju" >电压: {{data33}} </view>
+        <view class="canshu_shuju" >电流: {{data34}} </view>
+        <view class="canshu_shuju" >功率: {{data35}} </view>
+        <view class="canshu_shuju" >电量: {{data36}} </view>
       </view>
-      <view class="canshu">
-        <view class="canshu_shuju" style="display: flex; font-size: 26rpx;">蓄电池</view>
-        <view class="canshu_shuju" >电压:{{data0}}v</view>
-        <view class="canshu_shuju" >电流:{{data1}}a</view>
-        <view class="canshu_shuju" >功率:{{data2}}w</view>
-        <view class="canshu_shuju" >电量:{{data3}}kwh</view>
-      </view>
-    </view>
-  </view>  
+    </view>   -->
+
+  </view>   
   <view class="btn0">
     <view class="btn1">
       <view class="btn2">
         <text>充电</text>
-        <switch class="btn3" checked="{{isChecked1}}" bindchange="changeSwitch1"/>
+        <switch class="btn3" checked="{{isChecked1}}" data-k ="k1" bindchange="changeSwitch"/>
       </view>
       <view class="btn2">
         <text>智能</text>
-        <switch class="btn3" checked="{{isChecked2}}" bindchange="changeSwitch2"/>
+        <switch class="btn3" checked="{{isChecked2}}" data-k ="k2" bindchange="changeSwitch"/>
       </view>
       <view class="btn2">
         <text>并网</text>
-        <switch class="btn3" checked="{{isChecked3}}" bindchange="changeSwitch3"/>
+        <switch class="btn3" checked="{{isChecked3}}" data-k ="k3" bindchange="changeSwitch"/>
       </view>
       <view class="btn2">
         <text>市电</text>
-        <switch class="btn3" checked="{{isChecked4}}" bindchange="changeSwitch4"/>
+        <switch class="btn3" checked="{{isChecked4}}" data-k ="k4" bindchange="changeSwitch"/>
       </view>
     </view>
     <view class="btn1">
       <view class="btn2">
         <text>并网</text>
-        <switch class="btn3" checked="{{isChecked5}}" bindchange="changeSwitch5"/>
+        <switch class="btn3" checked="{{isChecked5}}" data-k ="k5" bindchange="changeSwitch"/>
       </view>
       <view class="btn2">
         <text>太阳能</text>
-        <switch class="btn3" checked="{{isChecked6}}" bindchange="changeSwitch6"/>
+        <switch class="btn3" checked="{{isChecked6}}" data-k ="k6" bindchange="changeSwitch"/>
       </view>
       <view class="btn2">
         <text>逆变器</text>
-        <switch class="btn3" checked="{{isChecked7}}" bindchange="changeSwitch7"/>
+        <switch class="btn3" checked="{{isChecked7}}" data-k ="k7" bindchange="changeSwitch"/>
       </view>
       <view class="btn2">
         <text>大门</text>
-        <switch class="btn3" checked="{{isChecked8}}" bindchange="changeSwitch8"/>
+        <switch class="btn3" checked="{{isChecked8}}" data-k ="k8" bindchange="changeSwitch"/>
       </view>
     </view>
     <view class="btn1">
       <view class="btn2">
         <text>冷水</text>
-        <switch class="btn3" checked="{{isChecked9}}" bindchange="changeSwitch9"/>
+        <switch class="btn3" checked="{{isChecked9}}" data-k ="k9" bindchange="changeSwitch"/>
       </view>
       <view class="btn2">
         <text>热水</text>
-        <switch class="btn3" checked="{{isChecked10}}" bindchange="changeSwitch10"/>
+        <switch class="btn3" checked="{{isChecked10}}" data-k ="k10" bindchange="changeSwitch"/>
       </view>
       <view class="btn2">
         <text>增压</text>
-        <switch class="btn3" checked="{{isChecked11}}" bindchange="changeSwitch11"/>
+        <switch class="btn3" checked="{{isChecked11}}" data-k ="k11" bindchange="changeSwitch"/>
       </view>
       <view class="btn2">
         <text>路灯</text>
-        <switch class="btn3" checked="{{isChecked12}}" bindchange="changeSwitch12"/>
+        <switch class="btn3" checked="{{isChecked12}}" data-k ="k12" bindchange="changeSwitch"/>
       </view>
     </view>
   </view>
+</view>
+<view  class="ktdy">
+    <view style="display: flex; font-size: 35rpx; justify-content: center; ">{{title}}</view>
+    <view  class="shuju_ktdy">
+      <view class="canshu_ktdy" >
+        <text>电压: {{ktdy0}} V</text>
+        <text>功率: {{ktdy2}} W</text>
+        <text>温度: {{ktdy5}} °</text>
+      </view>
+      <view class="canshu_ktdy" >
+        <view>电流: {{ktdy1}} A</view>
+        <view>容量: {{ktdy3}} AH</view>
+        <view>电能: {{ktdy4}} WH</view>
+      </view>
+    </view>
 </view>
