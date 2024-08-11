@@ -131,7 +131,7 @@
         <view class="canshu_shuju" >电量: {{data15}} Kwh</view>
       </view>
       <view class="canshu">
-        <view class="canshu_shuju" style="display: flex; font-size: 26rpx;">市电</view>
+        <view class="canshu_shuju"bindlongpress='echarts'data-statu="open" data-name='单体电压'style="display: flex; font-size: 26rpx;">市电</view>
         <view class="canshu_shuju" >电压: {{data16}} V</view>
         <view class="canshu_shuju" >电流: {{data17}} A</view>
         <view class="canshu_shuju" >功率: {{data18}} W</view>
@@ -227,7 +227,7 @@
     </view>
   </view>
 </view>
-<view  class="ktdy">
+<!-- <view  class="ktdy">
     <view style="display: flex; font-size: 35rpx; justify-content: center; ">{{title}}</view>
     <view  class="shuju_ktdy">
       <view class="canshu_ktdy" >
@@ -241,4 +241,6 @@
         <view>电能: {{ktdy4}} WH</view>
       </view>
     </view>
-</view>
+</view> -->
+  <ec-canvas wx:if="{{echarts}}" class="container"  id="mychart-dom-bar" canvas-id="mychart-bar" ec="{{ ec }}">
+  </ec-canvas>

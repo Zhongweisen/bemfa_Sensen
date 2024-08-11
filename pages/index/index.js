@@ -6,11 +6,109 @@ let It = ''
 let Uxf = ''
 let Utg = ''
 let T = ''
+let chart = null;
+var xAxis =[]
+var yAxis =[]
+
+import * as echarts from '../../ec-canvas/echarts';
+function initChart(canvas, width, height, dpr) {
+  chart = echarts.init(canvas, null, {
+    width: width,
+    height: height,
+    devicePixelRatio: dpr // new
+  });
+  canvas.setChart(chart);
+
+  var option = {
+    tooltip: {
+      trigger: 'axis',
+      shadowColor: 'rgba(0, 0, 0, 0)', // 设置阴影颜色为透明
+      shadowBlur: 0, // 设置阴影模糊度为0，即无阴影
+      textStyle: {
+        fontSize: 10 // 字体大小
+      },
+      //主要代码
+      formatter: function(params) {
+      　　var result = params[0].axisValue + "号"
+      　　params.forEach(function (item) {
+      　　　　result += "\n"+item.marker + item.seriesName + "：" + item.data + "度" +""
+      　　})
+      　　return result
+        }
+    },
+    legend: {
+      data: ['市电','发电','用电','充电'],
+      selected: {
+        '市电': true,
+        '发电': false,
+        '用电': false,
+        '充电': false,
+      }
+    },
+    grid: {
+      left: '3%',
+      right: '3%',
+      bottom: '3%',
+      containLabel: true
+    },
+    toolbox: {
+    show: true,
+    top:'10%',                    // 工具栏组件距离容器顶部的距离
+    feature: {
+      magicType: {
+        show: true,
+        type: ['line','bar'],
+        },
+      },
+    },
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: xAxis,
+      // axisLabel: {formatter: '{value} 号'},
+    },
+    yAxis: {
+      type: 'value',
+      // axisLabel: {formatter: '{value} kw.h'},
+    },
+    series: [
+      {
+        name: '市电',
+        type: 'line',
+        stack: 'Total',
+        data: yAxis
+      },
+      {
+        name: '发电',
+        type: 'line',
+        stack: 'Total',
+        data: [220, 182, 191, 234, 290, 330, 310]
+      },
+      {
+        name: '用电',
+        type: 'line',
+        stack: 'Total',
+        data: [150, 232, 201, 154, 190, 330, 410]
+      },
+      {
+        name: '充电',
+        type: 'line',
+        stack: 'Total',
+        data: [320, 332, 301, 334, 390, 330, 320]
+      },
+    ]
+  };
+
+  chart.setOption(option);
+  return chart;
+}
 Page({
   data: {
 
     //需要修改的地方
     uid:"4892bd7fe005ecbbccf35929157ec7e7",//用户密钥，巴法云控制台获取
+    xAxis:"xAxis",
+    yAxis:"yAxis",
     Auto:"Auto",//控制led的主题，创客云控制台创建
     DaMen:"DaMen001",//控制led的主题，创客云控制台创建
     Mppt:"Mppt",//控制led的主题，创客云控制台创建
@@ -22,9 +120,20 @@ Page({
     battryIMG:["e.png","e.png","e.png","e.png"],
     color0:"#999",color1:"#999",color2:"#999",color3:"#999",color4:"#999",color5:"#999",color6:"#999",
     showModalStatus: false,
+    echarts: false,
     title:"可调电源/放电仪",
-  },
+   
+    ec: {
+      onInit: initChart
+    }
 
+  },
+  // onReady() {
+  //   setTimeout(function () {
+  //     // 获取 chart 实例的方式
+  //     console.log(chart)
+  //   }, 1000);
+  // },
 //屏幕打开时执行的函数
   onLoad() {
     //检查设备是否在线
@@ -32,17 +141,18 @@ Page({
     //读取数据
     this.getData()
     //检查设备是打开还是关闭
-    this.getOnOff()
-
+    // this.getOnOff()
+    this.getcharts()
     //设置定时器
-    setInterval(this.getData, 1000)
+    setInterval(this.getData, 2000)
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh:function(){
-    this.getOnOff();
+    // this.getOnOff();
+    this.getcharts()
     this.getOnline()
     console.log("下拉刷新啦");
     wx.stopPullDownRefresh();//停止下拉刷新
@@ -64,6 +174,15 @@ Page({
     this.LedSendMsg("Mppt","mppt")
     this.LedSendMsg("Auto","K")
     this.LedSendMsg("Shidian001","K")
+  },
+  getcharts()
+  {
+    var that = this
+    that.setData({ 
+      echarts: false
+      })
+    this.LedSendMsg(this.data.Shidian,"charts08#")
+    setTimeout(this.getAxis, 1000)
   },
   /**
    * 升级按钮点击事件
@@ -274,6 +393,58 @@ getOnline(){
     }
   })
   },
+getAxis(){
+    //获取温湿度值，屏幕初始化时，未订阅收到温湿度时，先去主动获取值
+    //api 接口详细说明见巴法云接入文档
+    var that = this
+    wx.request({
+      url: 'https://api.bemfa.com/api/device/v1/data/1/get/', //状态api接口，详见巴法云接入文档
+      data: {
+        uid: that.data.uid,
+        topic: that.data.xAxis,
+        num:1
+      },
+      header: {
+        'content-type': "application/x-www-form-urlencoded"
+      },
+      success (res) {
+        if(res.data.msg[0] == "t"){
+          let data =  res.data.msg.slice(4)
+          xAxis =[]
+          for(let i = 0 ; i < data.length ; i += 2)
+          {
+            xAxis.push(parseInt(data.slice(i,i+2)))
+          }
+          console.log(xAxis)
+        }
+      }
+    })
+    wx.request({
+      url: 'https://api.bemfa.com/api/device/v1/data/1/get/', //状态api接口，详见巴法云接入文档
+      data: {
+        uid: that.data.uid,
+        topic: that.data.yAxis,
+        num:1
+      },
+      header: {
+        'content-type': "application/x-www-form-urlencoded"
+      },
+      success (res) {
+        if(res.data.msg[0] == "d"){
+            let data =  res.data.msg.slice(1)
+            yAxis =[]
+            for(let i = 0 ; i < data.length ; i += 4)
+            {
+              yAxis.push(data.slice(i,i+4)/100)
+            }
+            console.log(yAxis)
+            that.setData({ 
+            echarts: true
+            })
+          }
+        }
+    })
+  },
 //获取数据函数
   getAuto(){
     //获取温湿度值，屏幕初始化时，未订阅收到温湿度时，先去主动获取值
@@ -290,7 +461,7 @@ getOnline(){
         'content-type': "application/x-www-form-urlencoded"
       },
       success (res) {
-        // console.log(res)
+        console.log(res)
         if(res.data.msg.indexOf("#") != -1){//如果数据里包含#号，表示获取的是传感器值，因为单片机上传数据的时候用#号进行了包裹
           //如果有#号就进行字符串分割
           var all_data_arr = res.data.msg.split("#"); //分割数据，并把分割后的数据放到数组里。
@@ -308,94 +479,94 @@ getOnline(){
               data23:all_data_arr[8]/10,
               // dataTime:res.data.time
             })
+            console.log(all_data_arr[9])
           }
-          if(all_data_arr[0] == "K"){//判断是否上传了led状态
-            if(all_data_arr[1] == "1"){//如果单片机处于打开状态
+          if(all_data_arr[13] == "1"){//如果单片机处于打开状态
+              that.setData({ //数据赋值给变量
+                isChecked5:true,//赋值led状态
+              })
+          }else{
+            that.setData({ //数据赋值给变量
+              isChecked5:false,//赋值led状态
+            })
+          }
+          if(all_data_arr[14] == "1"){//如果单片机处于打开状态
+              that.setData({ //数据赋值给变量
+                isChecked6:true,//赋值led状态
+              })
+          }else{
+            that.setData({ //数据赋值给变量
+              isChecked6:false,//赋值led状态
+            })
+          } 
+          if(all_data_arr[15] == "1"){//如果单片机处于打开状态
+              that.setData({ //数据赋值给变量
+                isChecked7:true,//赋值led状态
+              })
+            }else{
+            that.setData({ //数据赋值给变量
+              isChecked7:false,//赋值led状态
+            })
+          }
+          if(all_data_arr[16] == "1"){//如果单片机处于打开状态
                 that.setData({ //数据赋值给变量
-                  isChecked5:true,//赋值led状态
+                  isChecked8:true,//赋值led状态
                 })
             }else{
               that.setData({ //数据赋值给变量
-                isChecked5:false,//赋值led状态
+                isChecked8:false,//赋值led状态
               })
             }
-              if(all_data_arr[2] == "1"){//如果单片机处于打开状态
-                  that.setData({ //数据赋值给变量
-                    isChecked6:true,//赋值led状态
-                  })
-              }else{
+            if(all_data_arr[17] == "1"){//如果单片机处于打开状态
                 that.setData({ //数据赋值给变量
-                  isChecked6:false,//赋值led状态
+                  isChecked9:true,//赋值led状态
                 })
-              } 
-            if(all_data_arr[3] == "1"){//如果单片机处于打开状态
-                that.setData({ //数据赋值给变量
-                  isChecked7:true,//赋值led状态
-                })
-              }else{
+            }else{
               that.setData({ //数据赋值给变量
-                isChecked7:false,//赋值led状态
+                isChecked9:false,//赋值led状态
               })
             }
-            if(all_data_arr[4] == "1"){//如果单片机处于打开状态
-                  that.setData({ //数据赋值给变量
-                    isChecked8:true,//赋值led状态
-                  })
-              }else{
+            if(all_data_arr[18] == "1"){//如果单片机处于打开状态
                 that.setData({ //数据赋值给变量
-                  isChecked8:false,//赋值led状态
+                  isChecked10:true,//赋值led状态
+                })
+            }else{
+              that.setData({ //数据赋值给变量
+                isChecked10:false,//赋值led状态
+              })
+            }
+            if(all_data_arr[19] == "1"){//如果单片机处于打开状态
+                that.setData({ //数据赋值给变量
+                  isChecked11:true,//赋值led状态
+                })
+                }else{
+                that.setData({ //数据赋值给变量
+                  isChecked11:false,//赋值led状态
                 })
               }
-              if(all_data_arr[5] == "1"){//如果单片机处于打开状态
-                  that.setData({ //数据赋值给变量
-                    isChecked9:true,//赋值led状态
-                  })
-              }else{
+            if(all_data_arr[20] == "1"){//如果单片机处于打开状态
+              that.setData({ //数据赋值给变量
+                isChecked12:true,//赋值led状态
+              })
+                }else{
                 that.setData({ //数据赋值给变量
-                  isChecked9:false,//赋值led状态
+                  isChecked12:false,//赋值led状态
                 })
-              }
-              if(all_data_arr[6] == "1"){//如果单片机处于打开状态
-                  that.setData({ //数据赋值给变量
-                    isChecked10:true,//赋值led状态
-                  })
-              }else{
-                that.setData({ //数据赋值给变量
-                  isChecked10:false,//赋值led状态
-                })
-              }
-              if(all_data_arr[7] == "1"){//如果单片机处于打开状态
-                  that.setData({ //数据赋值给变量
-                    isChecked11:true,//赋值led状态
-                  })
-                  }else{
-                  that.setData({ //数据赋值给变量
-                    isChecked11:false,//赋值led状态
-                  })
-                }
-              if(all_data_arr[8] == "1"){//如果单片机处于打开状态
-                that.setData({ //数据赋值给变量
-                  isChecked12:true,//赋值led状态
-                })
-                  }else{
-                  that.setData({ //数据赋值给变量
-                    isChecked12:false,//赋值led状态
-                  })
-              }
+            }
+        
+            if(all_data_arr[0] == "canshu"){
+              that.setData({ //数据赋值给变量
+                Max:all_data_arr[1],
+                output:all_data_arr[2],
+              })
+            }
+            if(all_data_arr[0] == "except"){
+              wx.showModal({
+                title: '报错',
+                content: all_data_arr[1]
+              })
+            }    
           }
-          if(all_data_arr[0] == "canshu"){
-            that.setData({ //数据赋值给变量
-              Max:all_data_arr[1],
-              output:all_data_arr[2],
-            })
-          }
-          if(all_data_arr[0] == "except"){
-            wx.showModal({
-              title: '报错',
-              content: all_data_arr[1]
-            })
-          }    
-        }
       }
     })    
   },
@@ -507,24 +678,44 @@ getOnline(){
         'content-type': "application/x-www-form-urlencoded"
       },
       success (res) {
-        // console.log(res)
+        // if(res.data.msg[0] == "t"){
+        //   let data =  res.data.msg.slice(4)
+        //   xAxis =[]
+        //   for(let i = 0 ; i < data.length ; i += 2)
+        //   {
+        //     xAxis.push(data.slice(i,i+2))
+        //   }
+        // }else    
+        //   if(res.data.msg[0] == "d"){
+        //     let data =  res.data.msg.slice(1)
+        //     yAxis =[]
+        //     for(let i = 0 ; i < data.length ; i += 4)
+        //     {
+        //       yAxis.push(data.slice(i,i+4)/100)
+        //     }
+        //     console.log(yAxis)
+        //     that.setData({ 
+        //     echarts: true
+        //     })
+        // }
+
         if(res.data.msg.indexOf("#") != -1){//如果数据里包含#号，表示获取的是传感器值，因为单片机上传数据的时候用#号进行了包裹
           //如果有#号就进行字符串分割
           var all_data_arr = res.data.msg.split("#"); //分割数据，并把分割后的数据放到数组里。
           // console.log(all_data_arr)//打印数组
-          if(all_data_arr[0]=="Shidian001")
+          if(all_data_arr[0]==that.data.Shidian)
           {
             that.setData({ //数据赋值给变量
               data16:all_data_arr[2],
               data17:all_data_arr[3],
               data18:all_data_arr[4],
               data19:all_data_arr[5],
+              
             })
-          }
-          if(all_data_arr[0] == "K"){//判断是否上传了led状态
             if(all_data_arr[1] == "1"){//如果单片机处于打开状态
                 that.setData({ //数据赋值给变量
                   isChecked4:true,//赋值led状态
+                  
                 })
             }else{
               that.setData({ //数据赋值给变量
@@ -797,6 +988,7 @@ getOnline(){
         this.LedSendMsg("K7001","off")
       }
     }  
+
     else if(k=="k12")
     {
       if(status==true){
@@ -905,4 +1097,20 @@ getOnline(){
     });
   }
   },
+  echarts: function (e) {
+    let that=this
+    var currentStatu = e.currentTarget.dataset.statu;
+    var Shebei = e.target.dataset.name;
+  //   this.util(currentStatu)
+  //   if (currentStatu == "open") {
+  //     this.setData({
+  //       echarts: true
+  //     });
+  //   }
+  //   if (currentStatu == "close") {
+  //     this.setData({
+  //       echarts: false
+  //     });
+  //   }
+  }
 })

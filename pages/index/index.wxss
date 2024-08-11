@@ -197,10 +197,19 @@ input {
 }
 .canshu_ktdy{
   height:200rpx;
-  /* width: 500rpx; */
   display: flex;
   flex-direction: column;
   justify-content: space-evenly; 
   font-size: 40rpx;	   /* 字体大小 */
 }
-
+.container {
+  position: absolute;
+  width: 690rpx;
+  height: 400rpx;
+  display: flex;
+  margin: 0.8em;
+  margin-top:5px;                   /*顶部边距*/
+  border: 3rpx solid #2CC2C3;
+  background-color: #e6e6e6;
+  border-radius: 10px;
+}
