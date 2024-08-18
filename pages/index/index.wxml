@@ -1,7 +1,7 @@
 <!--index.wxml-->
 
 
-<view class="sen">
+
     <!--弹出框-->
     <view class="drawer_screen" bindtap="tanchuan" data-statu="close" data-name='' wx:if="{{showModalStatus}}"></view>
     <!--content-->
@@ -9,75 +9,72 @@
     <view class="animation_position">
       <view animation="{{animationData}}" class="drawer_box" wx:if="{{showModalStatus}}">
       <!--drawer content-->
-        <view class="drawer_title" >{{Shebei}}</view>
+        <view class="drawer_title" >{{Shebei}}
+        </view>
         <view  wx:if="{{Dantidianya}}">
-                <view class="swiperbattery1">
-                    <view class="swiperbattery2" wx:for="{{4}}" wx:for-index="i" wx:key="*this">
-                        <view style="height: 46rpx; display: flex; align-content: flex-start;">
-                            <image src="img/{{battryIMG[i]}}" style="position: absolute; width: 115rpx; height: 47rpx; z-index: 1;"></image>
-                            <text style="position: absolute; text-align: center; width: 115rpx; height: 62rpx; z-index: 2;">{{i+1}}</text>
-                        </view>
-                        <view style="text-align: center; width: 110rpx;">{{cellVotage[i]}}V</view>
-                    </view>
-                </view>
-                <view style="height: auto; width: 100%; padding-top: 12px; padding-bottom: 31rpx;  font-size: 33rpx;">
-                  <view style="display: flex; width: 100%; height: auto;">
-                        <view style="width: 50%; height: auto; text-align: center;">总电压：{{data0}}V</view>
-                        <view style="width: 50%; height: auto; text-align: center;">电池电量：{{data2}}%</view>
+          <view class="swiperbattery1">
+              <view class="swiperbattery2" wx:for="{{4}}" wx:for-index="i" wx:key="*this">
+                  <view style="height: 46rpx; display: flex; align-content: flex-start;">
+                      <image src="img/{{battryIMG[i]}}" style="position: absolute; width: 115rpx; height: 47rpx; z-index: 1;"></image>
+                      <text style="position: absolute; text-align: center; width: 115rpx; height: 62rpx; z-index: 2;">{{i+1}}</text>
                   </view>
-                  <view style="display: flex; width: 100%; height: auto;">
-                        <view style="width: 50%; height: auto; text-align: center;">保护板温度：{{data3_1}}  °C</view>
-                        <view style="width: 50%; height: auto; text-align: center;">电池温度：{{data3_2}}  °C</view>
-                    </view>
-                    <view class="btn">
-        <view class="btn_ok" bindtap="tanchuan" data-statu="ble_off" data-name='单体电压'>断开蓝牙</view>
-        <view class="btn_ok" bindtap="tanchuan"  data-statu="ble_on" data-name="单体电压">打开蓝牙</view>
+                  <view style="text-align: center; width: 110rpx;">{{cellVotage[i]}}V</view>
+              </view>
+          </view>
+          <view style="height: auto; width: 100%; padding-top: 12px; padding-bottom: 31rpx;  font-size: 33rpx;">
+            <view style="display: flex; width: 100%; height: auto;">
+                  <view style="width: 50%; height: auto; text-align: center;">总电压：{{data0}}V</view>
+                  <view style="width: 50%; height: auto; text-align: center;">电池电量：{{data2}}%</view>
+            </view>
+            <view style="display: flex; width: 100%; height: auto;">
+                  <view style="width: 50%; height: auto; text-align: center;">保护板温度：{{data3_1}}  °C</view>
+                  <view style="width: 50%; height: auto; text-align: center;">电池温度：{{data3_2}}  °C</view>
+            </view>
+            <view class="btn">
+              <view class="btn_ok" bindtap="tanchuan" data-statu="ble_off" data-name='单体电压'>断开蓝牙</view>
+              <view class="btn_ok" bindtap="tanchuan"  data-statu="ble_on" data-name="单体电压">打开蓝牙</view>
+            </view>
+          </view>
+        </view>
+        <view wx:if="{{Bingwangkongzhiqi}}" class="drawer_content">
+          <view class="grid">
+            <label class="title col-0">电池容量:</label>
+            <input class="input_base input_h30 col-1" bindblur="Max" placeholder="({{Max}}A)"></input>
+          </view>
+          <view class="grid">
+            <label class="title col-0">当前容量:</label>
+            <input class="input_base input_h30 col-1" bindblur="output" placeholder="({{output}}A)"></input>
+          </view>
+          <view class="btn">
+            <view class="btn_ok" bindtap="tanchuan" data-statu="close" data-name='Jiaozhui'>满电校准</view>
+            <view class="btn_ok" bindtap="tanchuan" data-statu="close" data-name="ok">确定
+            </view>
+          </view>
+        </view>
+        <view wx:if="{{Taiyangnengkongzhiqi}}" class="drawer_content">
+          <view class="grid">
+            <label class="title col-0">充电电压:</label>
+            <input class="input_base input_h30 col-1" bindblur="Uxm" placeholder="12.5V-14.5V ({{Canshu1}}V)"></input>
+          </view>
+          <view class="grid">
+            <label class="title col-0">充电电流:</label>
+            <input class="input_base input_h30 col-1" bindblur="It" placeholder="10A-80A ({{Canshu2}}A)"></input>
+          </view>
+          <view class="grid">
+            <label class="title col-0">浮充电压:</label>
+            <input class="input_base input_h30 col-1" bindblur="Uxf" placeholder="13.8V-14.2V ({{Canshu3}}V)"></input>
+          </view>
+          <view class="bottom grid">
+            <label class="title col-0">追踪电压:</label>
+            <input class="input_base input_h30 col-1" bindblur="Utg" placeholder="14V-18V ({{Canshu4}}V)"></input>
+          </view>
+          <view class="grid">
+            <label class="title col-0">温度保护:</label>
+            <input class="input_base input_h30 col-1" bindblur="T" placeholder="30°C-60°C ({{Canshu5}}°C)"></input>
+          </view>
+        <view class="btn_ok" bindtap="tanchuan" data-statu="close" data-name='太阳能控制器'>确定</view>
+        </view>
       </view>
-
-                </view>
-        </view>
-    <view  wx:if="{{Bingwangkongzhiqi}}">
-      <view class="drawer_content">
-        <view class="grid">
-          <label class="title col-0">电池容量:</label>
-          <input class="input_base input_h30 col-1" bindblur="Max" placeholder="({{Max}}A)"></input>
-        </view>
-        <view class="grid">
-          <label class="title col-0">当前容量:</label>
-          <input class="input_base input_h30 col-1" bindblur="output" placeholder="({{output}}A)"></input>
-        </view>
-      </view>
-      <view class="btn">
-        <view class="btn_ok" bindtap="tanchuan" data-statu="close" data-name='Jiaozhui'>满电校准</view>
-        <view class="btn_ok" bindtap="tanchuan" data-statu="close" data-name="ok">确定
-        </view>
-      </view>
-    </view>
-
-    <view class="drawer_content" wx:if="{{Taiyangnengkongzhiqi}}">
-        <view class="grid">
-          <label class="title col-0">充电电压:</label>
-          <input class="input_base input_h30 col-1" bindblur="Uxm" placeholder="12.5V-14.5V ({{Canshu1}}V)"></input>
-        </view>
-        <view class="grid">
-          <label class="title col-0">充电电流:</label>
-          <input class="input_base input_h30 col-1" bindblur="It" placeholder="10A-80A ({{Canshu2}}A)"></input>
-        </view>
-        <view class="grid">
-          <label class="title col-0">浮充电压:</label>
-          <input class="input_base input_h30 col-1" bindblur="Uxf" placeholder="13.8V-14.2V ({{Canshu3}}V)"></input>
-        </view>
-        <view class="bottom grid">
-          <label class="title col-0">追踪电压:</label>
-          <input class="input_base input_h30 col-1" bindblur="Utg" placeholder="14V-18V ({{Canshu4}}V)"></input>
-        </view>
-        <view class="grid">
-          <label class="title col-0">温度保护:</label>
-          <input class="input_base input_h30 col-1" bindblur="T" placeholder="30°C-60°C ({{Canshu5}}°C)"></input>
-        </view>
-      <view class="btn_ok" bindtap="tanchuan" data-statu="close">确定</view>
-    </view>
-    </view>
   </view>
 
   
@@ -92,12 +89,8 @@
     <view class="zhuangtai" style='color:{{color5}};' bindtap="Shezhi_Wlrg" data-statu="open" bindlongpress='shengji' data-name='五菱荣光' >Wlrg</view>
     <view class="zhuangtai" style='color:{{color6}};' bindtap="Shezhi_Ktdy" data-statu="open" bindlongpress='shengji' data-name='可调电源' >Ktdy</view>
   </view>
-
-
   <!--时间显示-->
   <!-- <view class="dataTime">上传时间：{{dataTime}}</view> -->
-
-  <!--温湿度数值-->
   <view  class="shujukuang">
     <view  class="shuju">
       <view class="canshu">
@@ -181,7 +174,7 @@
         <switch class="btn3" checked="{{isChecked2}}" data-k ="k2" bindchange="changeSwitch"/>
       </view>
       <view class="btn2">
-        <text>并网</text>
+        <text>大门</text>
         <switch class="btn3" checked="{{isChecked3}}" data-k ="k3" bindchange="changeSwitch"/>
       </view>
       <view class="btn2">
@@ -203,7 +196,7 @@
         <switch class="btn3" checked="{{isChecked7}}" data-k ="k7" bindchange="changeSwitch"/>
       </view>
       <view class="btn2">
-        <text>大门</text>
+        <text>备用</text>
         <switch class="btn3" checked="{{isChecked8}}" data-k ="k8" bindchange="changeSwitch"/>
       </view>
     </view>
@@ -226,7 +219,7 @@
       </view>
     </view>
   </view>
-</view>
+
 <!-- <view  class="ktdy">
     <view style="display: flex; font-size: 35rpx; justify-content: center; ">{{title}}</view>
     <view  class="shuju_ktdy">
@@ -242,5 +235,12 @@
       </view>
     </view>
 </view> -->
+<view class="sen">
+
   <ec-canvas wx:if="{{echarts}}" class="container"  id="mychart-dom-bar" canvas-id="mychart-bar" ec="{{ ec }}">
   </ec-canvas>
+</view>
+
+
+
+
